@@ -28,6 +28,8 @@ public class WhatsMyName {
     
     public void testTotalBirths() {
         FileResource fr = new FileResource("../Data Sets/us_babynames_test/yob2012short.csv");
+        System.out.println("Running totalBirths()\n");
         totalBirths(fr);
+        System.out.println("\nExpected output - Total Births - 73. Female Births - 40, Male Births - 33");
     }
 }
