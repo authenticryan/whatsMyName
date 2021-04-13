@@ -198,6 +198,7 @@ public class WhatsMyName {
 
         return averageRank; 
     }
+
     public void testGetAverageRank(){
         System.out.println("Beginning test of getAverageRank()\n");
 
@@ -210,10 +211,53 @@ public class WhatsMyName {
         System.out.println("\nRunning test for Jacob, Female");
         testAverageRank = getAverageRank("Jacob", "M");
         System.out.println("Expected Outome -> 2.66. Returned -> " + testAverageRank);
-        
+
         // test for non existent name
         System.out.println("\nRunning test for Ryan, Male");
         testAverageRank = getAverageRank("Ryan", "M");
         System.out.println("Expected Outome -> -1. Returned -> " + testAverageRank);
+    }
+
+    // returns total cumulative births ranked higher than a specific name. Returns -1 if no name is found
+    public int getTotalBirthsRankedHigher(int searchYear, String searchName, String searchGender) {
+        FileResource fr = new FileResource("../Data Sets/us_babynames_by_year/yob"+searchYear+".csv");
+
+        // for testing only. !!NOT IN PRODUCTION!!
+        // FileResource fr = new FileResource("../Data Sets/us_babynames_test/yob"+searchYear+"short.csv");
+        int nameRanking = getRankLogic(fr, searchName, searchGender);
+        if (nameRanking == -1)
+            return -1;
+
+        int birthsRankedHigher = 0, index = 0;        
+        for (CSVRecord record : fr.getCSVParser(false)) {
+            if(record.get(1).equalsIgnoreCase(searchGender)) {
+                index++;
+                if(index < nameRanking) 
+                    birthsRankedHigher += Integer.parseInt(record.get(2));
+                else 
+                    return birthsRankedHigher;
+            }
+        }
+        return birthsRankedHigher;
+    }
+
+    public void testGetTotalBirthsRankedHigher() {
+        System.out.println("Testing function getTotalBirthsRankedHigher()\n");
+
+        // Testing Male
+        System.out.println("\nTesting Ethan, Male in 2012");
+        int testBirthsRankedHigher = getTotalBirthsRankedHigher(2012, "Ethan", "M");
+        System.out.println("Expected -> 15. Received -> " + testBirthsRankedHigher);
+
+        // Testing Male
+        System.out.println("\nTesting Olivai, Female in 2012");
+        testBirthsRankedHigher = getTotalBirthsRankedHigher(2012, "Olivia", "F");
+        System.out.println("Expected -> 27. Received -> " + testBirthsRankedHigher);
+
+        // Testing Wrong Name
+        System.out.println("\nTesting Ryan, Male in 2012");
+        testBirthsRankedHigher = getTotalBirthsRankedHigher(2012, "Ryan", "M");
+        System.out.println("Expected -> -1. Received -> " + testBirthsRankedHigher);
+
     }
 }
