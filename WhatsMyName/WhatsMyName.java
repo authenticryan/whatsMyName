@@ -24,7 +24,7 @@ public class WhatsMyName {
         System.out.println("Total Births is " + totalBirths +
             "\nTotal Female Births is " + totalFemaleBirths +
             "\nTotal Male Births is " + totalMaleBirths);
-    }    
+    }  
 
     public void getTotalBirths(){
         FileResource fr = new FileResource();
@@ -36,6 +36,28 @@ public class WhatsMyName {
         System.out.println("Running totalBirths()\n");
         totalBirths(fr);
         System.out.println("\nExpected output - Total Births - 73. Female Births - 40, Male Births - 33");
+    }
+
+    public void totalNames(FileResource fr) {
+        int totalFemaleNames = 0, totalMaleNames = 0, totalNames = 0;
+
+        for (CSVRecord record : fr.getCSVParser(false)) {
+
+            if (record.get(1).equals("F")){
+                totalFemaleNames++;
+            } else {
+                totalMaleNames++;
+            }   
+        }
+        totalNames = totalFemaleNames + totalMaleNames;
+        System.out.println("Total Births is " + totalNames +
+            "\nTotal Female Births is " + totalFemaleNames +
+            "\nTotal Male Births is " + totalMaleNames);
+    }
+
+    public void getTotalNames() {
+        FileResource fr = new FileResource();
+        totalNames(fr);
     }
 
     // returns rank of a given name, from a given FileResource. Returns -1 if no name is availabe in that year
@@ -70,7 +92,6 @@ public class WhatsMyName {
 
         testRank = getRank(1930, "Json", "M");
         System.out.println("Expected result for Json, Male in 1930 -> -1. getRank() Function Returned -> " + testRank);
-
     }
 
     // return name of the individual, at corresponding ranking in Gender 
